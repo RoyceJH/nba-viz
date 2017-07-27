@@ -7,4 +7,14 @@ module.exports = {
     path: path.resolve(__dirname, 'dist')
   },
   devtool: 'source-map',
+  loaders: [
+    {
+      test: [/\.js?$/],
+      exclude: /(node_modules)/,
+      loader: 'babel-loader',
+      query: {
+        presets: ['es2015']
+      }
+    }
+  ]
 };
