@@ -67,6 +67,10 @@
 /* 0 */
 /***/ (function(module, exports) {
 
+document.addEventListener('DOMContentLoaded', () => {
+  const canvas = document.querySelector('canvas');
+  
+});
 
 
 /***/ })
