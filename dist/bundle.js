@@ -65,12 +65,35 @@
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, exports) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__nba_api_util__ = __webpack_require__(1);
+
 
 document.addEventListener('DOMContentLoaded', () => {
   const canvas = document.querySelector('canvas');
-  
+  let call = __WEBPACK_IMPORTED_MODULE_0__nba_api_util__["a" /* getAllPlayers */];
+  debugger
 });
+
+
+/***/ }),
+/* 1 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+const root = "http://data.nba.net/10s";
+
+const getAllPlayers = () => {
+  return $.ajax({
+    method: 'GET',
+    url: 'http://data.nba.net/10s/prod/v1/2017/players.json'
+  });
+};
+/* harmony export (immutable) */ __webpack_exports__["a"] = getAllPlayers;
+
 
 
 /***/ })
