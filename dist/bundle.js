@@ -75,7 +75,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 document.addEventListener('DOMContentLoaded', () => {
   const canvas = document.querySelector('canvas');
   let call = __WEBPACK_IMPORTED_MODULE_0__nba_api_util__["a" /* getAllPlayers */];
-  debugger
+  call().then(players => console.log(players));
 });
 
 
@@ -89,7 +89,11 @@ const root = "http://data.nba.net/10s";
 const getAllPlayers = () => {
   return $.ajax({
     method: 'GET',
-    url: 'http://data.nba.net/10s/prod/v1/2017/players.json'
+    url: "http://data.nba.net/10s/prod/v1/2017/players.json",
+    crossDomain : true,
+    xhrFields: {
+        withCredentials: true
+    }
   });
 };
 /* harmony export (immutable) */ __webpack_exports__["a"] = getAllPlayers;
