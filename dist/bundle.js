@@ -82,25 +82,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const allPlayers = [];
 
   __WEBPACK_IMPORTED_MODULE_0__nba_api_util__["a" /* getAllPlayers */]().then(data => {
+    console.log(data);
     const info = JSON.parse(data).league.standard;
     info.forEach(player => allPlayers.push(new __WEBPACK_IMPORTED_MODULE_1__player__["a" /* default */](player)));
   });
-  const viz = __WEBPACK_IMPORTED_MODULE_2_d3__["select"]('#canvas').append('svg');
-  viz.attr("width", 900);
-  viz.attr("height", 400);
-  var nodes = [{x: 100, y: 200},
-              {x: 300, y: 400},
-              {x: 500, y: 200}];
-              viz.text("The Graph")
-                  .select("#graph");
-  viz.selectAll("circle .nodes")
-    .data(nodes)
-    .enter()
-    .append("svg:circle")
-    .attr("class", "nodes")
-    .attr("cx", function(d) { return d.x; })
-    .attr("cy", function(d) { return d.y; });
-
+  const viz = __WEBPACK_IMPORTED_MODULE_2_d3__["select"]('#graph').append('svg');
+  viz.attr("width", 900).attr("height", 400);
+  var nodes = [{x: 30, y: 50},
+             {x: 50, y: 80},
+             {x: 90, y: 120}];
   viz.selectAll("circle .nodes")
     .data(nodes)
     .enter()
@@ -108,8 +98,9 @@ document.addEventListener('DOMContentLoaded', () => {
     .attr("class", "nodes")
     .attr("cx", function(d) { return d.x; })
     .attr("cy", function(d) { return d.y; })
-    .attr("r", "20px")
-    .attr("fill", "blue");
+    .attr("r", "10px")
+    .attr("fill", "black");
+  debugger
 });
 
 
