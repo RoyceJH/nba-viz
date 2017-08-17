@@ -81,39 +81,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const canvas = document.querySelector('canvas');
   const allPlayers = [];
 
-  __WEBPACK_IMPORTED_MODULE_0__nba_api_util__["a" /* getAllPlayers */]().then(data => {
+  Object(__WEBPACK_IMPORTED_MODULE_0__nba_api_util__["a" /* getAllPlayers */])().then(data => {
     // console.log(data);
     const info = JSON.parse(data).league.standard;
     info.forEach(player => allPlayers.push(new __WEBPACK_IMPORTED_MODULE_1__player__["a" /* default */](player)));
   });
   const viz = __WEBPACK_IMPORTED_MODULE_2_d3__["select"]('#graph').append('svg');
   viz.attr("width", 900).attr("height", 400);
-  var nodes = [{x: 30, y: 50},
-             {x: 50, y: 80},
-             {x: 90, y: 120}];
-  viz.selectAll("circle .nodes")
-    .data(nodes)
-    .enter()
-    .append("svg:circle")
-    .attr("class", "nodes")
-    .attr("cx", function(d) { return d.x; })
-    .attr("cy", function(d) { return d.y; })
-    .attr("r", "10px")
-    .attr("fill", "black");
-
-  var links = [
-    {source: nodes[0], target: nodes[1]},
-    {source: nodes[2], target: nodes[1]}
-  ];
-  viz.selectAll(".line")
-   .data(links)
-   .enter()
-   .append("line")
-   .attr("x1", function(d) { return d.source.x; })
-   .attr("y1", function(d) { return d.source.y; })
-   .attr("x2", function(d) { return d.target.x; })
-   .attr("y2", function(d) { return d.target.y; })
-   .style("stroke", "rgb(6,120,155)");
 });
 
 
@@ -127,13 +101,25 @@ const root = "http://data.nba.net/10s";
 const getAllPlayers = () => {
   return $.ajax({
     method: 'GET',
-    url: "http://data.nba.net/10s/prod/v1/2017/players.json",
+    url: root + "/prod/v1/2017/players.json",
     dataType: 'jsonp',
-    jsonpCallback: 'logger',
     crossOrigin: true,
   });
 };
 /* harmony export (immutable) */ __webpack_exports__["a"] = getAllPlayers;
+
+
+// "/prod/v1/2017/players/{{personId}}_uber_stats.json"
+
+const getPlayerStats = (playerId) => {
+  return $.ajax({
+    method: 'GET',
+    url: root + `/prod/v1/2017/players/${playerId}_profile.json`,
+    dataType: 'jsonp',
+    crossOrigin: true,
+  });
+};
+/* harmony export (immutable) */ __webpack_exports__["b"] = getPlayerStats;
 
 
 
@@ -142,12 +128,33 @@ const getAllPlayers = () => {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__nba_api_util__ = __webpack_require__(1);
+
+
 class Player {
   constructor({firstName, lastName, personId, yearsPro}) {
-    this.firstName = firstName;
-    this.lastName = lastName;
+    this.playerName = firstName + " " + lastName;
     this.personId = personId;
     this.yearsPro = yearsPro;
+    this.stats = {};
+    this.getStats();
+    this.bindings();
+  }
+
+  bindings() {
+    this.getStats = this.getStats.bind(this);
+  }
+
+  getStats() {
+    Object(__WEBPACK_IMPORTED_MODULE_0__nba_api_util__["b" /* getPlayerStats */])(this.personId).then((data) => {
+      const profile = JSON.parse(data).league.standard.stats;
+      this.stats[2016] = profile.latest;
+      this.stats.career = profile.careerSummary;
+      profile.regularSeason.season.forEach((sn) => {
+        this.stats[`${sn.seasonYear}`] = sn.total;
+      });
+      debugger
+    });
   }
 }
 
