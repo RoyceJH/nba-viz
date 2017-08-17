@@ -1,12 +1,9 @@
 body {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   height: 100vh;
 }
 
-canvas {
+#graph {
   border: 1px solid green;
-  display: flex;
-  margin: 0 auto;
-  justify-content: center;
 }
