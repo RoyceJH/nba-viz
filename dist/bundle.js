@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const allPlayers = [];
 
   __WEBPACK_IMPORTED_MODULE_0__nba_api_util__["a" /* getAllPlayers */]().then(data => {
-    console.log(data);
+    // console.log(data);
     const info = JSON.parse(data).league.standard;
     info.forEach(player => allPlayers.push(new __WEBPACK_IMPORTED_MODULE_1__player__["a" /* default */](player)));
   });
@@ -100,7 +100,20 @@ document.addEventListener('DOMContentLoaded', () => {
     .attr("cy", function(d) { return d.y; })
     .attr("r", "10px")
     .attr("fill", "black");
-  debugger
+
+  var links = [
+    {source: nodes[0], target: nodes[1]},
+    {source: nodes[2], target: nodes[1]}
+  ];
+  viz.selectAll(".line")
+   .data(links)
+   .enter()
+   .append("line")
+   .attr("x1", function(d) { return d.source.x; })
+   .attr("y1", function(d) { return d.source.y; })
+   .attr("x2", function(d) { return d.target.x; })
+   .attr("y2", function(d) { return d.target.y; })
+   .style("stroke", "rgb(6,120,155)");
 });
 
 
