@@ -71,24 +71,40 @@
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__nba_api_util__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__player__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_d3__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_d3___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_d3__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__team__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_d3__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_d3___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_d3__);
+
 
 
 
 
 document.addEventListener('DOMContentLoaded', () => {
   const canvas = document.querySelector('canvas');
-  const allPlayers = [];
+  let allPlayers;
+  let allTeams;
 
-  Object(__WEBPACK_IMPORTED_MODULE_0__nba_api_util__["a" /* getAllPlayers */])().then(data => {
-    // console.log(data);
-    const info = JSON.parse(data).league.standard;
-    info.forEach(player => allPlayers.push(new __WEBPACK_IMPORTED_MODULE_1__player__["a" /* default */](player)));
+  Object(__WEBPACK_IMPORTED_MODULE_0__nba_api_util__["a" /* getAllPlayers */])().then((data) => {
+    allPlayers = createPlayers(data);
   });
-  const viz = __WEBPACK_IMPORTED_MODULE_2_d3__["select"]('#graph').append('svg');
+
+  Object(__WEBPACK_IMPORTED_MODULE_0__nba_api_util__["b" /* getAllTeams */])().then(data => {
+    allTeams = createTeams(data);
+  });
+
+  const viz = __WEBPACK_IMPORTED_MODULE_3_d3__["select"]('#graph').append('svg');
   viz.attr("width", 900).attr("height", 400);
 });
+
+const createPlayers = (data) => {
+  const info = JSON.parse(data).league.standard;
+  return info.map(player => new __WEBPACK_IMPORTED_MODULE_1__player__["a" /* default */](player));
+};
+
+const createTeams = (data) => {
+  const info = JSON.parse(data).league.standard;
+  return info.map(team => new __WEBPACK_IMPORTED_MODULE_2__team__["a" /* default */](team));
+};
 
 
 /***/ }),
@@ -119,7 +135,18 @@ const getPlayerStats = (playerId) => {
     crossOrigin: true,
   });
 };
-/* harmony export (immutable) */ __webpack_exports__["b"] = getPlayerStats;
+/* harmony export (immutable) */ __webpack_exports__["c"] = getPlayerStats;
+
+
+const getAllTeams = () => {
+  return $.ajax({
+    method: 'GET',
+    url: root + `/prod/v1/2017/teams.json`,
+    dataType: 'jsonp',
+    crossOrigin: true,
+  });
+};
+/* harmony export (immutable) */ __webpack_exports__["b"] = getAllTeams;
 
 
 
@@ -146,14 +173,13 @@ class Player {
   }
 
   getStats() {
-    Object(__WEBPACK_IMPORTED_MODULE_0__nba_api_util__["b" /* getPlayerStats */])(this.personId).then((data) => {
+    Object(__WEBPACK_IMPORTED_MODULE_0__nba_api_util__["c" /* getPlayerStats */])(this.personId).then((data) => {
       const profile = JSON.parse(data).league.standard.stats;
       this.stats[2016] = profile.latest;
       this.stats.career = profile.careerSummary;
       profile.regularSeason.season.forEach((sn) => {
         this.stats[`${sn.seasonYear}`] = sn.total;
       });
-      debugger
     });
   }
 }
@@ -17075,6 +17101,21 @@ exports.zoomIdentity = identity$8;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })));
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+class Team {
+  constructor(data) {
+    this.name = data.fullName;
+    this.teamId = data.teamId;
+  }
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (Team);
 
 
 /***/ })
