@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -68,60 +68,11 @@
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__nba_api_util__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__player__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__team__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_d3__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_d3___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_d3__);
+const root = "https://data.nba.net/10s";
 
-
-
-
-
-document.addEventListener('DOMContentLoaded', () => {
-  const canvas = document.querySelector('canvas');
-  let allPlayers;
-  let allTeams;
-
-  Object(__WEBPACK_IMPORTED_MODULE_0__nba_api_util__["a" /* getAllPlayers */])().then((data) => {
-    allPlayers = createPlayers(data);
-  });
-
-  Object(__WEBPACK_IMPORTED_MODULE_0__nba_api_util__["b" /* getAllTeams */])().then(data => {
-    allTeams = createTeams(data);
-  });
-
-  const viz = __WEBPACK_IMPORTED_MODULE_3_d3__["select"]('#graph').append('svg');
-  viz.attr("width", 900).attr("height", 400);
-  let d32 = axis;
-  debugger
-
-  let xRange = __WEBPACK_IMPORTED_MODULE_3_d3__["scaleLinear"]().range([40, 400]).domain([0,100]);
-  let yRange = __WEBPACK_IMPORTED_MODULE_3_d3__["scaleLinear"]().range([40, 400]).domain([0,100]);
-  let xAxis = __WEBPACK_IMPORTED_MODULE_3_d3__["axis"]().scale(xRange);
-  let yAxis = __WEBPACK_IMPORTED_MODULE_3_d3__["axis"]().scale(yRange);
-  viz.append("svg:g").call(xAxis);
-  viz.append("svg:g").call(yAxis);
-});
-
-const createPlayers = (data) => {
-  const info = JSON.parse(data).league.standard;
-  return info.map(player => new __WEBPACK_IMPORTED_MODULE_1__player__["a" /* default */](player));
+const logger = (data) => {
+  console.log(data);
 };
-
-const createTeams = (data) => {
-  const info = JSON.parse(data).league.standard;
-  return info.map(team => new __WEBPACK_IMPORTED_MODULE_2__team__["a" /* default */](team));
-};
-
-
-/***/ }),
-/* 1 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-const root = "http://data.nba.net/10s";
 
 const getAllPlayers = () => {
   return $.ajax({
@@ -133,8 +84,6 @@ const getAllPlayers = () => {
 };
 /* harmony export (immutable) */ __webpack_exports__["a"] = getAllPlayers;
 
-
-// "/prod/v1/2017/players/{{personId}}_uber_stats.json"
 
 const getPlayerStats = (playerId) => {
   return $.ajax({
@@ -160,11 +109,59 @@ const getAllTeams = () => {
 
 
 /***/ }),
+/* 1 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__nba_api_util__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__player__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__team__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__graph__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_d3__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_d3___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_d3__);
+
+
+
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  const canvas = document.querySelector('canvas');
+  let allPlayers;
+  let allTeams;
+
+  Object(__WEBPACK_IMPORTED_MODULE_0__nba_api_util__["a" /* getAllPlayers */])().then((data) => {
+    allPlayers = createPlayers(data);
+  });
+
+  Object(__WEBPACK_IMPORTED_MODULE_0__nba_api_util__["b" /* getAllTeams */])().then(data => {
+    allTeams = createTeams(data);
+  });
+
+  const viz = __WEBPACK_IMPORTED_MODULE_4_d3__["select"]('#graph').append('svg');
+  viz.attr("width", 900).attr("height", 600);
+
+  const g = new __WEBPACK_IMPORTED_MODULE_3__graph__["a" /* default */]([40, 400], [40, 400], viz);
+});
+
+const createPlayers = (data) => {
+  const info = JSON.parse(data).league.standard;
+  return info.map(player => new __WEBPACK_IMPORTED_MODULE_1__player__["a" /* default */](player));
+};
+
+const createTeams = (data) => {
+  const info = JSON.parse(data).league.standard;
+  return info.map(team => new __WEBPACK_IMPORTED_MODULE_2__team__["a" /* default */](team));
+};
+
+
+/***/ }),
 /* 2 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__nba_api_util__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__nba_api_util__ = __webpack_require__(0);
 
 
 class Player {
@@ -198,6 +195,21 @@ class Player {
 
 /***/ }),
 /* 3 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+class Team {
+  constructor(data) {
+    this.name = data.fullName;
+    this.teamId = data.teamId;
+  }
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (Team);
+
+
+/***/ }),
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // https://d3js.org Version 4.10.0. Copyright 2017 Mike Bostock.
@@ -17113,18 +17125,26 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-class Team {
-  constructor(data) {
-    this.name = data.fullName;
-    this.teamId = data.teamId;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_d3__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_d3___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_d3__);
+
+
+class Graph {
+  constructor(xScale, yScale, viz) {
+    const xRange = __WEBPACK_IMPORTED_MODULE_0_d3__["scaleLinear"]().range(xScale).domain([0,100]);
+    const yRange = __WEBPACK_IMPORTED_MODULE_0_d3__["scaleLinear"]().range(yScale).domain([100,0]);
+    const xAxis = __WEBPACK_IMPORTED_MODULE_0_d3__["axisBottom"]().scale(xRange);
+    const yAxis = __WEBPACK_IMPORTED_MODULE_0_d3__["axisLeft"]().scale(yRange);
+    viz.append("svg:g").call(xAxis).attr("transform", 'translate(' + -10 + ',' + 400 + ')');
+    viz.append("svg:g").call(yAxis).attr('transform', 'translate(' + 25 + ',' + 0 + ')');
   }
 }
 
-/* harmony default export */ __webpack_exports__["a"] = (Team);
+/* harmony default export */ __webpack_exports__["a"] = (Graph);
 
 
 /***/ })
