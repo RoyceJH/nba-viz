@@ -94,6 +94,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const viz = __WEBPACK_IMPORTED_MODULE_3_d3__["select"]('#graph').append('svg');
   viz.attr("width", 900).attr("height", 400);
+  let d32 = axis;
+  debugger
+
+  let xRange = __WEBPACK_IMPORTED_MODULE_3_d3__["scaleLinear"]().range([40, 400]).domain([0,100]);
+  let yRange = __WEBPACK_IMPORTED_MODULE_3_d3__["scaleLinear"]().range([40, 400]).domain([0,100]);
+  let xAxis = __WEBPACK_IMPORTED_MODULE_3_d3__["axis"]().scale(xRange);
+  let yAxis = __WEBPACK_IMPORTED_MODULE_3_d3__["axis"]().scale(yRange);
+  viz.append("svg:g").call(xAxis);
+  viz.append("svg:g").call(yAxis);
 });
 
 const createPlayers = (data) => {
